@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/value_mensaje_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="64dp"
+    android:paddingRight="64dp"
+    android:paddingBottom="16dp"
+    tools:context="com.aasana.caedu.ocrprognostic.controller.activity.FragmentContainerActivity">>
+
+
+    <TextView
+        android:id="@+id/nombre_campo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="fill_vertical"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/value_campo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:text="" />
+
+    <ImageButton
+        android:id="@+id/textWithCamera"
+        style="@android:style/Widget.ImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_menu_camera" />
+
+    <Button
+        android:id="@+id/sendFirebase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/md_amber_300"
+        android:background="#FFFF00"
+        android:text="SEND"
+        android:visibility="invisible"/>
+
+
+</LinearLayout>

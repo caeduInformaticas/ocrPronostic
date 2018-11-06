@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Navigation Drawer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="feedbacktitle">feedbacktitle</string>
+    <string name="feedbackname">feedbackname</string>
+    <string name="feedbackemail">feedbackemail</string>
+
+    <string name="feedbacktype1">Arto</string>
+    <string name="feedbacktype2">Poco</string>
+    <string name="feedbacktype3">Nada</string>
+    <string name="feedbacktype">feedbacktype</string>
+    <string name="feedbackbody">feedbackbody</string>
+    <string name="feedbackresponse">feedbackresponse</string>
+    <string name="feedbackbutton">feedbackbutton</string>
+    <string name="next">Siguiente</string>
+    <string name="previous">Anterior</string>
+    <string name="title_activity_main_activityfalse">MainActivityfalse</string>
+</resources>
