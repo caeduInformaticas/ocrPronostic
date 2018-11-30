@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0E0E0"
-    tools:context=".controller.activity.NotificationActivity"
-    android:orientation="vertical">
+    tools:context=".controller.fragments.NotifyFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -76,4 +75,5 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
-</LinearLayout>
+
+</FrameLayout>

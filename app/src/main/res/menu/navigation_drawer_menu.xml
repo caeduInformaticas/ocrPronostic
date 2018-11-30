@@ -10,28 +10,21 @@
         <item
             android:id="@+id/item_message_vuelos"
             android:icon="@drawable/ic_action_toggle_star"
-            android:title="Mensaje de Vuelo" />
+            android:title="Mensaje Vuelo" />
         <item
             android:id="@+id/item_pronostico"
             android:icon="@drawable/ic_action_content_send"
-            android:title="Mensaje del Pronostico" />
+            android:title="Mensaje Pronostico" />
         <item
-            android:id="@+id/item_about"
+            android:id="@+id/select_airports"
             android:icon="@drawable/ic_action_content_drafts"
-            android:title="About" />
+            android:title="Escoger Destinos"/>
+        <item
+            android:id="@+id/update_airport"
+            android:icon="@drawable/ic_action_content_drafts"
+            android:title="Cambiar Aeropuerto"/>
     </group>
 
-    <item android:title="Subheader">
-        <menu>
-            <item
-                android:id="@+id/item_navigation_drawer_settings"
-                android:icon="@drawable/ic_action_content_mail"
-                android:title="Settings" />
-            <item
-                android:id="@+id/item_navigation_drawer_help_and_feedback"
-                android:icon="@drawable/ic_action_action_delete"
-                android:title="Help and feedback" />
-        </menu>
-    </item>
+
 
 </menu>

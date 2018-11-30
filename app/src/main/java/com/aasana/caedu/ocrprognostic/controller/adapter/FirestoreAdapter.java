@@ -16,7 +16,9 @@ package com.aasana.caedu.ocrprognostic.controller.adapter;
  */
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.aasana.caedu.ocrprognostic.controller.activity.AeropuertoActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,7 +29,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -53,41 +59,40 @@ public abstract class FirestoreAdapter<VH
     public FirebaseFirestore firestore;
     public CollectionReference collectionReference;
     private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
+    private ArrayList<Integer> mSnapshotsPositions = new ArrayList<>();
+    private Map<Integer,DocumentSnapshot> mMapSnapshots = new HashMap<>();
+//    private String[] arrayAirportDestination;
+    private String nameAirport;
 
-
-    public FirestoreAdapter(Query query) {
-
+   /* public FirestoreAdapter(Query query, String[] arrayAirportDestination) {
         mQuery = query;
+        this.arrayAirportDestination = new String[arrayAirportDestination.length];
+        for(int i=0; i< arrayAirportDestination.length; i++){
+            this.arrayAirportDestination[i] = arrayAirportDestination[i];
+            Log.e("FirestoreDestination", ": "+this.arrayAirportDestination[i]);
+        }
+    }*/
+    public FirestoreAdapter(Query query,String nameAirport) {
+        this.nameAirport=nameAirport;
+        mQuery = query;
+
     }
 
 
-    public void startListening() {
-        if (mQuery != null) {
-            mRegistration = mQuery.addSnapshotListener(this);
-            Log.e("FirestoreAdapter", "startListening   mRegistration  ::"+ mRegistration.toString());
-        }
-        else{
-            Log.e("FirestoreAdapter", "startListening   nulll  ::");
 
-        }
+    public void startListening() {
+        mQuery.addSnapshotListener(this);
+        Log.e("FirestoreAdapter", "startListening   mRegistration  ::"+ mQuery.getFirestore().toString());
+
     }
 
 
     public void stopListening() {
-        if (mRegistration != null) {
-            mRegistration.remove();
-            mRegistration = null;
-        }
-
         mSnapshots.clear();
         notifyDataSetChanged();
     }
 
     public void setQuery(Query query) {
-        // Stop listening
-        //stopListening();
-
-        // Clear existinkodig data
         mSnapshots.clear();
         notifyDataSetChanged();
 
@@ -104,14 +109,29 @@ public abstract class FirestoreAdapter<VH
     protected DocumentSnapshot getSnapshot(int index) {
         return mSnapshots.get(index);
     }
+    public Map<Integer,DocumentSnapshot> getmMapSnapshots(){
+        return mMapSnapshots;
+    }
     public ArrayList<DocumentSnapshot> getmSnapshots(){
         return mSnapshots;
     }
+    public ArrayList<Integer> getmSnapshotsPosition(){
+        return mSnapshotsPositions;
+    }
+
     protected void onError(FirebaseFirestoreException e) {
 
     };
+    protected void onModified(){
 
-    protected void onDataChanged() {}
+    }
+    protected void onDelete(){
+
+    }
+
+    protected void onDataChanged() {
+
+    }
     @Override
     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
         // Handle errors
@@ -119,56 +139,101 @@ public abstract class FirestoreAdapter<VH
             Log.w(TAG, "onEvent:error", e);
             return;
         }
+        Log.e("query OnEvent ", "  :: ");
 
-        // Dispatch the event
         for (DocumentChange change : queryDocumentSnapshots.getDocumentChanges()) {
             // Snapshot of the changed document
             DocumentSnapshot snapshot = change.getDocument();
-            //Log.e("query document event ", "  :: "+ snapshot.getString("mSource"));
-            switch (change.getType()) {
-                case ADDED:
-                    onDocumentAdded(change);
-                    break;
-                case MODIFIED:
-                    onDocumentModified(change);
-                    Log.e("document changed", "65466456");
-                    break;
-                case REMOVED:
-                    onDocumentRemoved(change);
-                    break;
+            if (existAirportInArrayDestination(snapshot)) {
+                switch (change.getType()) {
+                    case ADDED:
+                        onDocumentAdded(change);
+                        break;
+                    case MODIFIED:
+                        onModified();
+//                        onDocumentModified(change);
+                        Log.e("document changed", "65466456");
+                        break;
+                    case REMOVED:
+                        onDelete();
+//                        onDocumentRemoved(change);
+                        break;
+                }
+//            }else
+                Log.e("elseFiresto", " // " + snapshot.getData().toString());
             }
+
+        }
+        onDataChanged();
+    }
+    protected boolean existAirportInArrayDestination(DocumentSnapshot snapshot){
+        String destino = snapshot.getString("destino");
+
+        if (destino!=null && nameAirport!= null){
+        String arrayDestino[] = destino.split(",");
+            for (int i = 0 ;i<arrayDestino.length ; i++){
+//                Log.e("iterateSnapchot", arrayAirportDestination.length+"that is add " + arrayAirportDestination[i]);
+
+                    if (nameAirport.equals(arrayDestino[i])){
+                        Log.e("YESINLISTt", arrayDestino[i]+ "/"+ nameAirport+" size:"+arrayDestino.length);
+                        return true;
+                    }
+                    else {
+                        Log.e("YESINLISTnot", arrayDestino[i]+ "/"+ nameAirport+" size:"+arrayDestino.length);
+
+//                    Log.e("YESINLIST", arrayDestino[j]+ "/"+ arrayAirportDestination[i]);
+                }
+            }
+        }else{
+            return false;
+
         }
 
-        onDataChanged();
-
+        return false;
     }
 
     protected void onDocumentAdded(DocumentChange change) {
-        mSnapshots.add(change.getNewIndex(), change.getDocument());
-        notifyItemInserted(change.getNewIndex());
+//        if (existAirportInArrayDestination(change.getDocument())){
+//            mSnapshotsPositions.add(change.getNewIndex());
 
-        Log.e("onDocumentAdded ",change.getNewIndex()+"  "+mSnapshots.get(change.getNewIndex()));
+//        }
+
+        mSnapshots.add(change.getDocument());
+        notifyItemInserted(change.getNewIndex());
+//        Log.e("onDocumentAdded", "destino is null " +mMapSnapshots.get(change.getNewIndex()).getId());
+        /*else{
+            if (mMapSnapshots.containsKey(change))
+        }*/
+
+//        mSnapshots.add(change.getNewIndex(), change.getDocument());
+//        notifyItemInserted(change.getNewIndex());
     }
 
     protected void onDocumentModified(DocumentChange change) {
-        if (change.getOldIndex() == change.getNewIndex()) {
+        /*if (change.getOldIndex() == change.getNewIndex() && mSnapshots.contains(change.getOldIndex())) {
+            DocumentSnapshot doc = change.getOldIndex();
             // Item changed but remained in same position
             mSnapshots.set(change.getOldIndex(), change.getDocument());
             notifyItemChanged(change.getOldIndex());
-        } else {
+        } else {*/
             // Item changed and changed position
             mSnapshots.remove(change.getOldIndex());
             mSnapshots.add(change.getNewIndex(), change.getDocument());
             notifyItemMoved(change.getOldIndex(), change.getNewIndex());
-        }
-        Log.e("onDocumentModified ","  "+mSnapshots.get(change.getNewIndex()));
+        /**/
+
+//        Log.e("onDocumentModified ","  "+mSnapshots.get(change.getNewIndex()));
 
     }
 
     protected void onDocumentRemoved(DocumentChange change) {
-        mSnapshots.remove(change.getOldIndex());
-        notifyItemRemoved(change.getOldIndex());
-        Log.e("onDocumentRemoved","  "+mSnapshots.get(change.getOldIndex()));
+       /* mSnapshots.remove(change.getOldIndex());
+        notifyItemRemoved(change.getOldIndex());*/
+        if (mSnapshots.contains(change.getOldIndex())) {
+            mSnapshots.remove(change.getOldIndex());
+            notifyItemRemoved(change.getOldIndex());
+        }else
+            Log.e("onDocumentRemnotCon","  "+mSnapshots.get(change.getOldIndex()));
 
     }
 

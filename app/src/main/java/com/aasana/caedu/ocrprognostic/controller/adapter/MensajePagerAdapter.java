@@ -9,6 +9,8 @@ import android.util.Log;
 import com.aasana.caedu.ocrprognostic.controller.fragments.ValorMensajeFragment;
 import com.aasana.caedu.ocrprognostic.model.MensajeLista;
 
+import java.io.Serializable;
+
 /**
  * Created by caedu on 12/9/2018.
  */
@@ -51,5 +53,6 @@ public class MensajePagerAdapter extends FragmentPagerAdapter {
 
         return mMensajeLista.getMensaje(position).getNombreCampo();
     }
+
 
 }

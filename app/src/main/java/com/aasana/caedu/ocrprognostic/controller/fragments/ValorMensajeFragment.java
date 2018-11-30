@@ -83,7 +83,10 @@ public class ValorMensajeFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (savedInstanceState!= null){
+            mMensaje = (Mensaje) getArguments().getSerializable(ARG_VALOR);
+            Log.e("savedInstanceState",mMensaje.getClass().toString());
+        }
         setHasOptionsMenu(true);
     }
 
@@ -107,7 +110,6 @@ public class ValorMensajeFragment extends Fragment{
         super.onCreateView(inflater, container, savedInstanceState);
 
 
-
         View root = inflater.inflate(R.layout.fragment_valor_mensaje, container, false);
 
         // Recogemos el modelo
@@ -127,7 +129,6 @@ public class ValorMensajeFragment extends Fragment{
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-
             Intent nextScreen = new Intent(getContext(), mAbbyy.getClass());
             startActivityForResult(nextScreen,123);
 
@@ -210,63 +211,9 @@ public class ValorMensajeFragment extends Fragment{
                     });
         }
     }
-    /*
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (band){
-            Log.e("ONSTART ", "///  TRUE");
-            CollectionReference pronosticRef = db.collection(mDominioApp);
-            pronosticRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                    if (e!=null){
-                        Log.e("addSnapshotListener" ,"FIRESTORE IS NULL ");
-
-                    }
-                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                        DocumentSnapshot documentSnapshot = dc.getDocument();
-                        String id = documentSnapshot.getId();
-                        int oldIndex = dc.getOldIndex();
-                        int newIndex = dc.getNewIndex();
-                        if (!documentSnapshot.contains(mTorreApp)){
-                            switch (dc.getType()){
-                                case ADDED:
-                                    Log.e("addSnapshotListener" ,oldIndex+"  :   add  :  " + newIndex);
-                                    NotificationManager notif = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                                    Notification notify=new Notification.Builder(getContext())
-                                            .setContentTitle("New mail from ")
-                                            .setContentText("nueva notificacion")
-                                            .setSmallIcon(R.drawable.header)
-                                            .build();
-
-
-                                    Intent notificationIntent = new Intent(getContext(), NotificationActivity.class);
-                                    notificationIntent.putExtra("NOTIFY", (Arrays.asList( documentSnapshot.getData()).toArray()));
-
-                                    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                                    PendingIntent intent = PendingIntent.getActivity(getContext(), 0,
-                                            notificationIntent, 0);
-
-                                    notify.flags |= Notification.FLAG_AUTO_CANCEL;
-                                    notif.notify(0, notify);
-
-                                    break;
-                            }
-                        }
-                    }
-                }
-            });
-
-        }
-    }
-    */
     public String valueEditText() {
         mValueEditText = mValorCampo.getText().toString();
-        //Log.e("VALUEEDITTEXT" ," ---::  " +  mValorCampo.getText().toString());
+        Log.e("VALUEEDITTEXT" ," ---::  " +  mValorCampo.getText().toString());
 
         return mValorCampo.getText().toString();
     }

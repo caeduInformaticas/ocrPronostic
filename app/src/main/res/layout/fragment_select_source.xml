@@ -11,8 +11,7 @@
         android:layout_marginBottom="67dp"
         android:layout_weight="1"
         android:background="@drawable/ic_menu_gallery"
-        android:orientation="horizontal"
-        android:onClick="onSendNameAeropuerto">
+        android:orientation="horizontal">
 
 
     </LinearLayout>

@@ -9,23 +9,23 @@
     android:paddingLeft="64dp"
     android:paddingRight="64dp"
     android:paddingBottom="16dp"
-    tools:context="com.aasana.caedu.ocrprognostic.controller.activity.FragmentContainerActivity">>
+    tools:context="com.aasana.caedu.ocrprognostic.controller.activity.NavigateActivity">>
 
 
-    <TextView
-        android:id="@+id/nombre_campo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="fill_vertical"
-        android:text="" />
+        <TextView
+            android:id="@+id/nombre_campo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="fill_vertical"
+            android:text="" />
 
-    <EditText
-        android:id="@+id/value_campo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:ems="10"
-        android:text="" />
+        <EditText
+            android:id="@+id/value_campo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:text="" />
 
     <ImageButton
         android:id="@+id/textWithCamera"

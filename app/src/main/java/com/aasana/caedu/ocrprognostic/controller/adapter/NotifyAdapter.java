@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aasana.caedu.ocrprognostic.R;
+import com.aasana.caedu.ocrprognostic.controller.activity.AeropuertoActivity;
 import com.aasana.caedu.ocrprognostic.controller.activity.NotificationActivity;
 import com.aasana.caedu.ocrprognostic.model.Mensaje;
 import com.aasana.caedu.ocrprognostic.model.Message;
@@ -18,19 +19,29 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NotifyAdapter extends FirestoreAdapter<NotifyAdapter.ViewHolder>{
 
     private OnMesaggeSelectedListener mListener;
+//    private String[] arrayDestin ;
+    public NotifyAdapter(Query query, OnMesaggeSelectedListener listener, String nameAirport) {
+        super(query,nameAirport);
 
-    public NotifyAdapter(Query query, OnMesaggeSelectedListener listener) {
-        super(query);
+
+
+//        this.arrayDestin =arrayDestin;
         mListener = listener;
 //        Log.e("Notify adapter", getmSnapshots().toString()+"   onmessaggeSelectListener " +listener.getClass().toString() );
     }
-
 
     @NonNull
     @Override
@@ -44,7 +55,37 @@ public class NotifyAdapter extends FirestoreAdapter<NotifyAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(getSnapshot(position), mListener);
+
+        /*if (getmMapSnapshots().containsKey(position)) {
+        }
+        else
+            Log.e("onbindnot found"," position"+position);
+*/
+        /*}else {
+            Log.e("elseSnapshotsPosition", getmSnapshots().get(position).toString() );
+//            bindViewHolder(holder,position);
+//            getmSnapshots().remove(position);
+//            notifyItemRemoved(position);
+        }*/
     }
+
+    @Override
+    public boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
+        return super.onFailedToRecycleView(holder);
+    }
+
+    /*@Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+        if (!getmSnapshotsPosition().contains(position)) {
+            getmSnapshots().remove(position);
+            notifyItemRemoved(position);
+            Log.e("paySnapshotsPosition"," position"+position);
+
+        }
+
+        }*/
+
     public interface  OnMesaggeSelectedListener{
         void onMessageSelect(DocumentSnapshot message);
 
@@ -62,70 +103,38 @@ public class NotifyAdapter extends FirestoreAdapter<NotifyAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            Log.e("ViewHolder", "item view  "+this.getItemId());
+            Log.e("ViewHolderButter", "item view  "+this.title_valor);
+        }
+        public void remove(){
 
         }
-
         public void bind(final DocumentSnapshot snapshot,
                          final OnMesaggeSelectedListener listener) {
-           // Message message = snapshot.toObject(Message.class);
+            // Message message = snapshot.toObject(Message.class);
 //            Resources resources = itemView.getResources();
-            title_valor.setText(snapshot.getString("mMessage"));
-            source.setText(snapshot.getString("mSource"));
-            priority.setText(snapshot.getString("mPriority"));
-            listener.onMessageSelect(snapshot);
+            String idDateSnapshot = snapshot.getId();
 
-            /*itemView.setOnClickListener(new View.OnClickListener() {
+            if (idDateSnapshot.length() > 20) {
+                String idSnapshot = idDateSnapshot.substring(0, idDateSnapshot.length() - 19);
+                String stringDate = idDateSnapshot.substring(idDateSnapshot.length() - 19,idDateSnapshot.length());
+//                Log.e("iflentidcorto",stringDate+" "+idSnapshot);
+
+                title_valor.setText(idSnapshot);
+                source.setText(stringDate);
+                priority.setText(snapshot.getString("prioridad"));
+                listener.onMessageSelect(snapshot);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (listener != null) {
                         listener.onMessageSelect(snapshot);
                     }
                 }
-            });*/
+            });
 
+            }else
+                Log.e("elselentidcorto","finalize()");
         }
     }
 }
-
-/*extends RecyclerView.Adapter<NotifyAdapter.MyViewHolder> {
-
-    private List<Mensaje> mensajeList;
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, year, genre;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title_row);
-            genre = (TextView) view.findViewById(R.id.genre);
-//            year = (TextView) view.findViewById(R.id.year);
-        }
-    }
-
-
-    public NotifyAdapter(List<Mensaje> mensajeList) {
-        this.mensajeList = mensajeList;
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_list_row, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Mensaje mensaje = mensajeList.get(position);
-        holder.title.setText(mensaje.getNombreCampo());
-        holder.genre.setText(mensaje.getValor());
-//        holder.year.setText(mensaje.getYear());
-    }
-
-    @Override
-    public int getItemCount() {
-        return mensajeList.size();
-    }
-}*/

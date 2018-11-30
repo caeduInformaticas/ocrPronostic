@@ -21,11 +21,11 @@ public class MensajeLista {
 
     public MensajeLista(){
         Mensaje clave = new Mensaje("CCC");
-        Mensaje yygg = new Mensaje("YYGG ggz");/*
-        Mensaje fecha = new Mensaje("dddffGtm");
+        Mensaje yygg = new Mensaje("YYGG ggz");
         Mensaje vvvvd = new Mensaje("VVVVD");
+        Mensaje nnnhh1 = new Mensaje("NNNhhh1");/*
+        Mensaje fecha = new Mensaje("dddffGtm");
         Mensaje ww = new Mensaje("WW WW WW");
-        Mensaje nnnhh1 = new Mensaje("NNNhhh1");
         Mensaje nnnhh2 = new Mensaje("NNNhhh2");
         Mensaje nnnhh3 = new Mensaje("NNNhhh3");
         Mensaje it = new Mensaje("IT / TT");
@@ -36,7 +36,9 @@ public class MensajeLista {
         Mensaje hr = new Mensaje("HR");*/
 
         mMensajes = Arrays.asList(new Mensaje[]{clave,yygg,
-//                fecha,vvvvd,ww,nnnhh1,nnnhh2,nnnhh3,it,apppp,informacion,tt,tbh,hr
+                vvvvd,
+                nnnhh1,
+// fecha,ww,nnnhh1,nnnhh2,nnnhh3,it,apppp,informacion,tt,tbh,hr
         });
     }
     public Mensaje getMensaje(int index) {
