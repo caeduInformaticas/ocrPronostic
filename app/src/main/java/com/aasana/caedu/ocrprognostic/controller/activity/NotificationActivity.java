@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,16 +78,19 @@ public class NotificationActivity extends AppCompatActivity implements NotifyAda
 
     private String[] arrayReadFile;
     private String[] arrayAirportDestinatino;
+    private NotificationManager mManager;
+    private NotificationHelper mNotificationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         readInternalFile();
-//        if (arrayReadFile.length>0)
-//        {
+        if (arrayReadFile.length>0)
+        {
 //            if (arrayReadFile.length>=3) {
                 initializeNames();
-                initializeArrayDestination();
+//                initializeArrayDestination();
                 setContentView(R.layout.activity_notification);
                 ButterKnife.bind(this);
 
@@ -102,14 +107,14 @@ public class NotificationActivity extends AppCompatActivity implements NotifyAda
                 makeToast("Seleccione Aeropuertos de Destino");
                 initIntentSelectAirport();
 //                this.finish();
-            }
+            }*/
 
-        }*/
+        }
 
-        /*else {
+        else {
             makeToast("Vaya a Menu-> Escoger Destinos y seleccione sus aeropuertos de destino");
 //            this.finish();
-        }*/
+        }
     }
 
     private void initializeArrayDestination() {
@@ -207,10 +212,9 @@ public class NotificationActivity extends AppCompatActivity implements NotifyAda
             Log.w("nulll", "No query, not initializing RecyclerView");
         }
 //        Log.e("initrecyclerView", "creater notification");
-    recorrerArrayDeSelects();
-
+    //recorrerArrayDeSelects();
+        mNotificationHelper = new NotificationHelper(this);
         mAdapter = new NotifyAdapter(mQuery,this,mNameAirport) {
-
             @Override
             protected void onDataChanged() {
                 // Show/hide content if the query returns empty.
@@ -223,7 +227,7 @@ public class NotificationActivity extends AppCompatActivity implements NotifyAda
 //                    Log.e("Activity onDataChaned", "getItemCount is ::" +getItemCount());
                     mRecyclerView.setVisibility(View.VISIBLE);
                     mEmptyView.setVisibility(View.GONE);
-                    createNotification();
+                    sendChanel("AASANA APP","Tenes "+getItemCount()+ " Mensajes Recividos");
                 }
             }
 
@@ -259,47 +263,29 @@ public class NotificationActivity extends AppCompatActivity implements NotifyAda
             Log.e("recorrerArrayDeSelects",i +" :: <"+arrayAirportDestinatino[i]+">" );
         }
     }
-
-
-    private void createNotification() {
-        /*NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_focused)
-                .setContentTitle(TITLE_NOTIFICATION)
-                .setContentText(CONTEXT_NOTIFY)
-                .setAutoCancel(true)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Much longer text that cannot fit one line..."))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-*/
-        Intent resultIntent = new Intent(this, NotificationActivity.class);
-// Create the TaskStackBuilder and add the intent, which inflates the back stack
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addNextIntentWithParentStack(resultIntent);
-// Get the PendingIntent containing the entire back stack
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_action_content_report)
-                .setContentTitle(TITLE_NOTIFICATION)
-                .setContentText( CONTEXT_NOTIFY)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Much longer text that cannot fit one line..."))
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(resultPendingIntent)
-                .setAutoCancel(true);
-
-
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0, mBuilder.build());
-       /* builder.setContentIntent(contentIntent);
-
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());*/
+    private void sendChanel(String title,String message){
+        NotificationCompat.Builder nb = mNotificationHelper.getChannelNotification(title,message);
+        mNotificationHelper.getManager().notify(1,nb.build());
     }
+
+
+    public NotificationManager getManager(){
+        if (mManager==null){
+            mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return mManager;
+    }
+    public NotificationCompat.Builder getChannelNotification(String title, String message){
+        Intent intent = new Intent(this,NotificationActivity.class);
+        PendingIntent resulPending = PendingIntent.getActivity(this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        return new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                .setAutoCancel(true)
+                .setContentIntent(resulPending);
+    }
+
 
 
     private void createNotificationChannel() {

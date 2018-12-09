@@ -25,7 +25,8 @@
             android:name=".controller.activity.AeropuertoActivity"
             android:configChanges="keyboardHidden|screenSize"
             android:label="@string/AASANAapp"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
